@@ -33,13 +33,15 @@ export const pluginManifest: CrxPluginFn = () => {
   let plugins: CrxPlugin[]
   let refId: string
   let config: ResolvedConfig
+  let offscreenHtml: string | undefined
 
   return [
     {
       name: 'crx:manifest-init',
       enforce: 'pre',
       async config(config, env) {
-        const { manifest: _manifest } = await getOptions(config)
+        const { manifest: _manifest, offscreen } = await getOptions(config)
+        offscreenHtml = offscreen
         manifest = await (typeof _manifest === 'function'
           ? _manifest(env)
           : _manifest)
@@ -74,7 +76,12 @@ export const pluginManifest: CrxPluginFn = () => {
           })
           // Merging explicit entries and build inputs
           const set = new Set<string>([entries, input].flat())
-          for (const x of [js, sw, html].flat()) set.add(x)
+          for (const x of [js, sw, html].flat()) {
+            if (x.endsWith('?static')) {
+              continue
+            }
+            set.add(x)
+          }
 
           return {
             ...config,
@@ -195,6 +202,9 @@ export const pluginManifest: CrxPluginFn = () => {
           if (manifest.content_scripts)
             for (const { js = [], matches = [] } of manifest.content_scripts)
               for (const id of js) {
+                if (id.endsWith('?static')) {
+                  continue
+                }
                 contentScripts.set(
                   prefix('/', id),
                   formatFileData({
@@ -211,6 +221,9 @@ export const pluginManifest: CrxPluginFn = () => {
           if (manifest.content_scripts)
             for (const { js = [], matches = [] } of manifest.content_scripts)
               for (const file of js) {
+                if (file.endsWith('?static')) {
+                  continue
+                }
                 const id = join(config.root, file)
                 const refId = this.emitFile({
                   type: 'chunk',
@@ -264,9 +277,11 @@ export const pluginManifest: CrxPluginFn = () => {
           // vite dev server sends html files through local host
           if (manifest.content_scripts)
             for (const script of manifest.content_scripts) {
-              script.js = script.js?.map((id) =>
-                getFileName({ id, type: 'loader' }),
-              )
+              script.js = script.js?.map((id) => {
+                return id.endsWith('?static')
+                  ? id.split('?')[0]
+                  : getFileName({ id, type: 'loader' })
+              })
             }
         } else {
           // transform hook emits files and replaces in manifest with ref ids
@@ -284,6 +299,9 @@ export const pluginManifest: CrxPluginFn = () => {
             ({ js = [], ...rest }) => {
               return {
                 js: js.map((id) => {
+                  if (id.endsWith('?static')) {
+                    return id.split('?')[0]
+                  }
                   const script = contentScripts.get(id)
                   const fileName = script?.loaderName ?? script?.fileName
                   if (typeof fileName === 'undefined')
@@ -337,6 +355,9 @@ export const pluginManifest: CrxPluginFn = () => {
             .map((k) => files[k])
             .flat()
             .map(async (f) => {
+              if (f.endsWith('?static')) {
+                return
+              }
               // copy an asset if it is missing from the bundle
               if (typeof bundle[f] === 'undefined') {
                 // get assets from project root or from public dir
@@ -362,14 +383,18 @@ Public dir: "${config.publicDir}"`,
 
         /* ---------- SETUP HTML PLACEHOLDER FILES --------- */
 
-        if (config.command === 'serve' && files.html.length) {
+        if (
+          config.command === 'serve' &&
+          (files.html.length || offscreenHtml)
+        ) {
           const refId = this.emitFile({
             type: 'asset',
             name: 'precontroller.js',
             source: precontrollerJs,
           })
           const precontrollerJsName = this.getFileName(refId)
-          files.html.map((f) =>
+          const htmls = [...files.html, offscreenHtml].filter(Boolean)
+          htmls.forEach((f) =>
             this.emitFile({
               type: 'asset',
               fileName: f,
