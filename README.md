@@ -1,31 +1,23 @@
 # ![CRXJS](./banner-github.png)
 
-## What is CRXJS?
+[![npm (scoped)](https://img.shields.io/npm/v/@crxjs/vite-plugin.svg)](https://www.npmjs.com/package/@crxjs/vite-plugin)
+[![GitHub last commit](https://img.shields.io/github/last-commit/crxjs/chrome-extension-tools.svg?logo=github)](https://github.com/crxjs/rollup-plugin-chrome-extension)
+![GitHub action badge](https://github.com/crxjs/chrome-extension-tools/actions/workflows/vite-plugin.yml/badge.svg)
 
-CRXJS is a project to bring a modern developer experience to the Chrome
-Extension ecosystem. This repo houses two bundling libraries: a
-[modern Vite plugin](./packages/vite-plugin/README.md) and a
-[legacy Rollup plugin](./packages/rollup-plugin/README.md).
+## CRXJS Vite Plugin
 
-[Get Started in 90 seconds.](https://crxjs.dev/vite-plugin)
+> Build a Chrome Extension with [Vite](https://vitejs.dev)⚡
 
-## Features
+CRXJS brings the Vite developer experience to Chrome Extensions:
 
-If you're starting a new Chrome Extension project, consider using
-[`@crxjs/vite-plugin`](https://crxjs.dev/vite-plugin). This Vite plugin brings
-all the features of Vite to the Chrome Extension developer experience.
+- True HMR for extension pages and content scripts
+- Simple config - everything is in the extension manifest
+- Static asset imports with automatic web-accessible resources
 
-|                               |                                          [`@crxjs/vite-plugin`](./packages/vite-plugin/README.md)                                           |                                         [`rollup-plugin-chrome-extension`](./packages/rollup-plugin/README.md)                                          |
-| :---------------------------- | :-----------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------: |
-| Works on                      |                                                        [Vite](https://vitejs.dev) ⚡                                                        |                                                             [Rollup](https://rollupjs.org)                                                              |
-| Simple Config                 |                                                                     Yes                                                                     |                                                                           Yes                                                                           |
-| HMR                           |                                                                  True HMR                                                                   |                                                                       Auto-reload                                                                       |
-| Static Asset Imports          |                                                                     Yes                                                                     |                                                                       With config                                                                       |
-| MV3                           |                                                                     Yes                                                                     |                                                                           Yes                                                                           |
-| MV2                           |                                                                      -                                                                      |                                                                           Yes                                                                           |
-| Auto Web-accessible Resources |                                                                     Yes                                                                     |                                                                            -                                                                            |
-| Documentation                 |                                           [CRXJS Vite Plugin Docs](https://crxjs.dev/vite-plugin)                                           |                                              [Extend Chrome Docs](https://www.extend-chrome.dev/rollup-plugin)                                              |
-| NPM                           | [![npm (scoped)](https://img.shields.io/npm/v/@crxjs/vite-plugin/latest.svg)](https://www.npmjs.com/package/@crxjs/vite-plugin) | [![npm (scoped)](https://img.shields.io/npm/v/rollup-plugin-chrome-extension/latest.svg)](https://www.npmjs.com/package/rollup-plugin-chrome-extension) |
+## Getting Started
+
+See the CRXJS documentation to
+[get started in 90 seconds 🚀](https://crxjs.dev/vite-plugin)
 
 ## Supporting
 
