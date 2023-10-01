@@ -501,13 +501,17 @@ export function manifestInput(
             JSON.stringify(slash(relative('assets', scriptPath))),
           )
 
+          if (scriptPath.endsWith('?static')) {
+            return scriptPath.split('?')[0]
+          }
+
           const assetId = this.emitFile({
             type: 'asset',
             source,
             name: basename(scriptPath),
           })
 
-          return this.getFileName(assetId)
+          return slash(this.getFileName(assetId))
         })
 
         // Setup content script import wrapper
@@ -515,10 +519,7 @@ export function manifestInput(
           return typeof js === 'undefined'
             ? rest
             : {
-                js: js
-                  .map(normalizeFilename)
-                  .map(memoizedEmitter)
-                  .map((p) => slash(p)),
+                js: js.map(normalizeFilename).map(memoizedEmitter),
                 ...rest,
               }
         })
