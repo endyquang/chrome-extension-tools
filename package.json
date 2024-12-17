@@ -1,6 +1,7 @@
 {
   "name": "crxjs-monorepo",
   "private": "true",
+  "main": "packages/vite-plugin/dist/index.cjs",
   "keywords": [
     "rollup-plugin",
     "vite-plugin",
