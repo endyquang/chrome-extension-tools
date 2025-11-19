@@ -10,5 +10,16 @@
     "index.cjs",
     "index.mjs",
     "index.d.ts"
-  ]
+  ],
+  "exports": {
+    ".": {
+      "require": "./index.cjs",
+      "import": "./index.mjs",
+      "types": "./index.d.ts"
+    },
+    "./*": "./*",
+    "./client": {
+      "types": "./client.d.ts"
+    }
+  }
 }
