@@ -6,6 +6,9 @@ import { cloneObject } from './cloneObject'
 import { convertMatchPatterns } from './convertMatchPatterns'
 
 export function getImportContentScriptFileName(target: string) {
+  if (target.endsWith('?static')) {
+    return target.split('?')[0]
+  }
   const base = basename(target)
   return target.replace(base, `import-${base}`)
 }

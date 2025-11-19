@@ -20,10 +20,6 @@ export const pluginContentScriptsCss: CrxPluginFn = () => {
                 if (contentScripts.has(fileName)) {
                   const { css } = contentScripts.get(fileName)!
                   if (css?.length) script.css = [script.css ?? [], css].flat()
-                } else {
-                  throw new Error(
-                    `Content script is undefined by fileName: ${fileName}`,
-                  )
                 }
       return manifest
     },

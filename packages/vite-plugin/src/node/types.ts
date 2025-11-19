@@ -91,6 +91,8 @@ export interface CrxOptions {
    * Default is "chrome".
    */
   browser?: Browser
+
+  offscreen?: string
 }
 
 export type Browser = 'firefox' | 'chrome'
